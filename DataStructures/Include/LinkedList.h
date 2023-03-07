@@ -25,6 +25,7 @@ typedef int (*compare)(const void *,const void *);
  */
 typedef struct Node{
     void **value;
+    size_t size;
     struct Node *next;
     struct Node *previous;
 } NODE;

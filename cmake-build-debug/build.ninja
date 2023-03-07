@@ -49,17 +49,11 @@ cmake_ninja_workdir = C$:/Users/trish/Desktop/Code/CSC430/MemoryManager/cmake-bu
 
 build cmake_object_order_depends_target_MemoryManager: phony || CMakeFiles/MemoryManager.dir
 
-build CMakeFiles/MemoryManager.dir/main.c.obj: C_COMPILER__MemoryManager_Debug C$:/Users/trish/Desktop/Code/CSC430/MemoryManager/main.c || cmake_object_order_depends_target_MemoryManager
-  DEP_FILE = CMakeFiles\MemoryManager.dir\main.c.obj.d
+build CMakeFiles/MemoryManager.dir/Src/main.c.obj: C_COMPILER__MemoryManager_Debug C$:/Users/trish/Desktop/Code/CSC430/MemoryManager/Src/main.c || cmake_object_order_depends_target_MemoryManager
+  DEP_FILE = CMakeFiles\MemoryManager.dir\Src\main.c.obj.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu11
   OBJECT_DIR = CMakeFiles\MemoryManager.dir
-  OBJECT_FILE_DIR = CMakeFiles\MemoryManager.dir
-
-build CMakeFiles/MemoryManager.dir/MemoryManager.c.obj: C_COMPILER__MemoryManager_Debug C$:/Users/trish/Desktop/Code/CSC430/MemoryManager/MemoryManager.c || cmake_object_order_depends_target_MemoryManager
-  DEP_FILE = CMakeFiles\MemoryManager.dir\MemoryManager.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu11
-  OBJECT_DIR = CMakeFiles\MemoryManager.dir
-  OBJECT_FILE_DIR = CMakeFiles\MemoryManager.dir
+  OBJECT_FILE_DIR = CMakeFiles\MemoryManager.dir\Src
 
 
 # =============================================================================
@@ -69,7 +63,7 @@ build CMakeFiles/MemoryManager.dir/MemoryManager.c.obj: C_COMPILER__MemoryManage
 #############################################
 # Link the executable MemoryManager.exe
 
-build MemoryManager.exe: C_EXECUTABLE_LINKER__MemoryManager_Debug CMakeFiles/MemoryManager.dir/main.c.obj CMakeFiles/MemoryManager.dir/MemoryManager.c.obj
+build MemoryManager.exe: C_EXECUTABLE_LINKER__MemoryManager_Debug CMakeFiles/MemoryManager.dir/Src/main.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\MemoryManager.dir

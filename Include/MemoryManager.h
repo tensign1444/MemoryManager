@@ -19,12 +19,15 @@
  */
 typedef struct Memory{
     int Count;
-    LIST *freeList;
-    LIST *busyList;
     LIST *memory;
     QUEUE *queue;
 }MEMORY;
 
+typedef struct data{
+    size_t size;
+    bool isFree;
+    void *data;
+} DATA;
 
 
 #endif //MEMORYMANAGER_MEMORYMANAGER_H
