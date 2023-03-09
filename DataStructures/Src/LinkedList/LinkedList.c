@@ -11,10 +11,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-LIST* InitList(compare Compare, size_t size){
-    if(size = 0)
-        size = sizeof(LIST);
-    LIST *list = malloc(size);
+LIST* InitList(compare Compare){
+    LIST *list = malloc(sizeof(LIST));
     if(list == NULL){
         return NULL;
     }

@@ -29,14 +29,20 @@ typedef struct data{
     void *data;
 } DATA;
 
-DATA *createNode(size_t size, bool free){
+/**
+ * Creates a node for the user when prompted.
+ * @param size amount of memory.
+ * @param free is the node free of data.
+ * @return pointer to node.
+ */
+NODE *createNode(size_t size, bool free){
     NODE *data;
     data->isFree = free;
     data->size = size;
-
+    return data;
 }
 
-#define DATA_SIZE sizeof(DATA)
+
 
 
 #endif //MEMORYMANAGER_MEMORYMANAGER_H
