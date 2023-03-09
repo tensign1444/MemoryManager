@@ -20,15 +20,16 @@
 
 
 static LIST *manager;
+size_t endPosition = 0;
 
 
 #define MINREQ 0x20000
 
-static MEMORY *initMemory(size_t maxSize){
+static LIST *initMemory(size_t maxSize){
     size_t required = maxSize;
     while(manager == NULL){
-        manager = malloc(required);
-        if (required < MINREQ)
+        manager = InitList(compare_int64_t);
+        if (required < MINREQ) // only enters if 128KB isn't available
         {
             if(manager)
             {
@@ -39,16 +40,10 @@ static MEMORY *initMemory(size_t maxSize){
         }
         required >>= 1;
     }
+    return manager;
 }
 
 static void freeMemory(){ free(manager);}
-
-DATA *createData(void *item, size_t size, bool free){
-    DATA data;
-    data.isFree = free;
-    data.size = size;
-    data.data = item;
-}
 
 static NODE *findFree(NODE **last, size_t size){
     NODE *curr = manager->head;
@@ -62,28 +57,24 @@ static NODE *findFree(NODE **last, size_t size){
 
 
 static NODE *requestMemory(size_t amount){
-    NODE *last = NULL;
-    NODE *block = findFree(NULL, amount);
-    if (block->value->size >= amount)
-    {
-        return block;
+    NODE *temp = NULL;
+    NODE *freePage = findFree(temp, amount);
+
+    if(freePage) {
+        freePage->value.isFree = true;
+        return freePage;
     }
-    // Append new block to list
-    block = manager + endpos;
-    endpos += META_SIZE + size;
-    if (last)
-    {
-        last->next = block;
-    }
-    else
-    {
-        first_block = block;
-    }
-    block->free = 0;
-    block->next = NULL;
-    block->size = size;
-    return block;
 }
+
+static NODE *splitPage(NODE *page, size_t amount){
+    if(page->value.size == amount)
+        return page;
+    else{
+        createNode()
+    }
+}
+
+
 
 MEMORY *Malloc(bool bestFit, MEMORY *mem, size_t item){
 

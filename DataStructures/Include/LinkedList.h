@@ -11,6 +11,7 @@
 
 #include <stdbool.h>
 #include <string.h>
+#include "../../Include/MemoryManager.h"
 
 /**
  * function that compares two elements.
@@ -24,8 +25,9 @@ typedef int (*compare)(const void *,const void *);
  * Node structure to hold the value along with the next and previous nodes.
  */
 typedef struct Node{
-    void **value;
+    void *value;
     size_t size;
+    bool isFree;
     struct Node *next;
     struct Node *previous;
 } NODE;

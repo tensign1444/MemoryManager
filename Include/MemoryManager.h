@@ -29,5 +29,14 @@ typedef struct data{
     void *data;
 } DATA;
 
+DATA *createNode(size_t size, bool free){
+    NODE *data;
+    data->isFree = free;
+    data->size = size;
+
+}
+
+#define DATA_SIZE sizeof(DATA)
+
 
 #endif //MEMORYMANAGER_MEMORYMANAGER_H
