@@ -41,6 +41,33 @@ static LIST *initMemory(size_t maxSize){
     return manager;
 }
 
+
+/**
+ * Changes to node isFree bool to true, and then coalesces the previous and before nodes to
+ * @param start node to begin the loop at.
+ */
+static void freeNode(NODE* start)
+{
+    NODE *curr = start;
+    start->isFree = true;
+    while(curr->next != NULL){
+        if(curr->isFree)
+        {
+            if(curr->next->isFree)
+            {
+                curr->size += curr->next->size;
+                free(curr->next);
+            }
+            if(curr->previous->isFree)
+            {
+                curr->size += curr->previous->size;
+                free(curr);
+            }
+        curr = curr->next;
+    }
+
+}
+
 /**
  * Frees the memory manager from the windows memory manager.
  */
