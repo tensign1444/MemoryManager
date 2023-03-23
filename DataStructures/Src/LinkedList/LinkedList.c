@@ -86,7 +86,7 @@ void DumpList(LIST *list){
     }
 }
 
-int IndexOf(LIST *list,void *value){
+int IndexOfValue(LIST *list,void *value){
     if(list->count <= 0) { return -1;}
     NODE *curr  = list->head;
     int counter = 1;
@@ -98,7 +98,6 @@ int IndexOf(LIST *list,void *value){
     }
     return -1;
 }
-
 
 void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
     if(list->count <= 0){
