@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include "../Test/MemoryManagerTest.h"
 
 int main() {
-    printf("Hello, World!\n");
+    TestAll();
     return 0;
 }
