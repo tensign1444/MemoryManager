@@ -99,6 +99,7 @@ int IndexOfValue(LIST *list,void *value){
     return -1;
 }
 
+
 void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
     if(list->count <= 0){
         Add(list, newValue);
