@@ -138,16 +138,4 @@ int randomInt(){
     return r;
 }
 
-int * ToArray(LIST *listHolder){
-    int nodeArray[listHolder->count];
-    NODE *curr  = listHolder->head;
-    int counter = 0;
-    while(curr != NULL){
-        nodeArray[counter] = (int) *curr->value;
-        counter++;
-        if(curr->next == NULL){break;}
-        curr = curr->next;
-    }
-    return nodeArray;
-}
 
