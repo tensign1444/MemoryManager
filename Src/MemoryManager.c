@@ -27,7 +27,7 @@ LIST *manager;
 NODE *createNode(size_t size, bool Free) {
     NODE *data;
     data->isFree = Free;
-    data->size = size;
+    data->value = &size;
     return data;
 }
 
@@ -39,7 +39,7 @@ NODE *createNode(size_t size, bool Free) {
 LIST *initMemory(size_t maxSize){
     size_t required = maxSize;
     while(manager == NULL){
-        manager = InitList(compare_int64_t);
+        manager = InitList(compare_size_t);
         if (required < MINREQ) // only enters if 128KB isn't available
         {
             if(manager)
@@ -49,6 +49,7 @@ LIST *initMemory(size_t maxSize){
             printf("Cannot allocate enough memory\n");
             exit(ENOMEM);
         }
+        Add(manager, &maxSize, true);
         required >>= 1;
     }
     return manager;
@@ -62,7 +63,7 @@ LIST *initMemory(size_t maxSize){
 int freeMemoryLocation(LIST* Mem, size_t start) {
     int indexOfNode = IndexOfValue(Mem, &start);
     NODE *curr = Mem->head;
-    for(int i = 0; i < indexOfNode; i++){ curr = curr->next}
+    for(int i = 0; i < indexOfNode; i++){ curr = curr->next;}
 
     if(curr->value == &start){
         if(curr->isFree){
@@ -104,7 +105,7 @@ NODE *findFree(NODE *start, size_t size, bool found) {
     NODE *curr = start;
     while (curr->next != NULL) {
         if (curr->isFree)
-            if (curr->size >= size)
+            if (curr->value >= size)
                 return curr;
         curr = curr->next;
     }
@@ -124,25 +125,26 @@ NODE *findFree(NODE *start, size_t size, bool found) {
 * @param amount of memory needed.
 * @return new page;
 */
-NODE *splitPage(NODE *page, size_t amount) {
-    if (page->size == amount) {
+NODE *splitPage(LIST *mem, NODE *page, size_t amount) {
+    if (page->value == amount) {
         page->isFree = false;
         return page;
     } else {
         NODE *newPage = createNode((size_t)page->value - amount, true);
+        size_t newSize = (size_t) page->value - amount;
         page->value = &amount;
         page->isFree = false;
-        InsertNodeAfterTarget(manager, IndexOfValue(manager, page->value), newPage);
+        InsertNodeAfterTarget(mem, IndexOfValue(manager, page->value), &newSize, false);
     }
 }
 
 
-NODE *bestFit(size_t amount) {
+NODE *bestFit(LIST *mem, size_t amount) {
     NODE *curr;
     NODE *tempBest = findFree(manager->head, amount, false);
     while (true) {
         curr = findFree(curr, amount, true);
-        if (tempBest->size - amount > curr->size - amount)
+        if (tempBest->value - amount > curr->value - amount)
             tempBest = curr;
     }
     return tempBest;
@@ -158,14 +160,14 @@ NODE *bestFit(size_t amount) {
 * @param amount of memory needed.
 * @return pointer to the new node with the size requested.
 */
-NODE *requestMemory(size_t amount) {
-    NODE *temp = manager->head;
+NODE *requestMemory(LIST *mem, size_t amount) {
+    NODE *temp = mem->head;
     NODE *freePage = findFree(temp, amount, false);
     if (BEST_FIT) {
-        freePage = bestFit(amount);
-        freePage = splitPage(freePage, amount);
+        freePage = bestFit(mem, amount);
+        freePage = splitPage(mem, freePage, amount);
     } else {
-        freePage = splitPage(freePage, amount);
+        freePage = splitPage(mem,   freePage, amount);
         return freePage;
     }
 }
@@ -175,8 +177,8 @@ NODE *requestMemory(size_t amount) {
  * @param size of memory to allocate
  * @return pointer to the memory location of the allocation.
  */
-NODE *Malloc(size_t size) {
-    return requestMemory(size);
+NODE *Malloc(LIST *mem, size_t size) {
+    return requestMemory(mem, size);
 }
 
 void DumpMemoryList() {
@@ -185,9 +187,9 @@ void DumpMemoryList() {
     NODE *curr = manager->head;
     while (curr->next != NULL) {
         if (curr->isFree) {
-            Add(freeList, curr);
+            Add(freeList, curr, true);
         } else {
-            Add(busyList, curr);
+            Add(busyList, curr, false);
         }
         curr = curr->next;
     }

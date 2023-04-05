@@ -38,7 +38,7 @@ void *Peek(STACK *ourStack){
 }
 
 void Push(STACK *ourStack, void *data) {
-    InsertNodeBeforeTarget(ourStack->list,1, data);
+    InsertNodeBeforeTarget(ourStack->list,1, data, false);
     ourStack->Count = ourStack->list->count;
 }
 

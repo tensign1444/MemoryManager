@@ -13,6 +13,19 @@
 #include "../Include/Stack.h"
 #include <time.h>
 #include <stdlib.h>
+#include <stddef.h>
+
+int compare_size_t(const void* a, const void* b) {
+    const size_t* pa = (const size_t*) a;
+    const size_t* pb = (const size_t*) b;
+    if (*pa < *pb) {
+        return -1;
+    } else if (*pa > *pb) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
 
 int compare_int32_t(const void *element1, const void *element2)
@@ -138,16 +151,5 @@ int randomInt(){
     return r;
 }
 
-int * ToArray(LIST *listHolder){
-    int nodeArray[listHolder->count];
-    NODE *curr  = listHolder->head;
-    int counter = 0;
-    while(curr != NULL){
-        nodeArray[counter] = (int) *curr->value;
-        counter++;
-        if(curr->next == NULL){break;}
-        curr = curr->next;
-    }
-    return nodeArray;
-}
+
 

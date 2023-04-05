@@ -23,7 +23,7 @@ QUEUE* InitQueue(compare Compare){
 
 
 void Enqueue(QUEUE *ourQueue,void *item){
-    Add(ourQueue->list, item);
+    Add(ourQueue->list, item, false);
     ourQueue->Count = ourQueue->list->count;
 }
 

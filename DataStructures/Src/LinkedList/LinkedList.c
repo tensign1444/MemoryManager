@@ -38,12 +38,13 @@ NODE *GetTail(NODE *temp){
 }
 
 
-void Add(LIST *list, void *value) {
+void Add(LIST *list, void *value, bool isFree) {
     NODE *pList = malloc(sizeof(NODE));
     if(pList == NULL){
         return;
     }
     pList->value = value;
+    pList->isFree = isFree;
     pList->next = pList->previous = NULL;
 
     if(list->count <= 0) {
@@ -99,9 +100,9 @@ int IndexOfValue(LIST *list,void *value){
     return -1;
 }
 
-void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
+void InsertNodeBeforeTarget(LIST *list, int index, void *newValue, bool isFree){
     if(list->count <= 0){
-        Add(list, newValue);
+        Add(list, newValue, isFree);
         return;
     }
     else if(index == 1){
@@ -128,11 +129,11 @@ void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
     list->count++;
 }
 
-void InsertNodeAfterTarget(LIST *list, int index, void *newValue){
+void InsertNodeAfterTarget(LIST *list, int index, void *newValue, bool isFree){
     if(list->count <= 0){
         return;
     }
-    InsertNodeBeforeTarget(list,index + 1, newValue);
+    InsertNodeBeforeTarget(list,index + 1, newValue, isFree);
 }
 
 bool UnlinkNodeByValue(LIST *list, void *value){

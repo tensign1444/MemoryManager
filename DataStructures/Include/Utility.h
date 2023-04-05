@@ -14,6 +14,14 @@
 #include "../Include/Stack.h"
 
 /**
+ * Compares two size_t variables to each-other.
+ * @param a void pointer to the first size_t.
+ * @param b void pointer to the second size_t.
+ * @return int, 1 when the first element is greater than the second, -1 when the first element is less than the second, 0 when both elements are equal.
+ */
+int compare_size_t(const void *a, const void *b);
+
+/**
  * Compares two 32 bit integers to each-other.
  * @param element1 void pointer to the first integer.
  * @param element2 void pointer to the second integer.

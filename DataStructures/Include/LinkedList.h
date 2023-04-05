@@ -54,7 +54,7 @@ LIST* InitList(compare Compare);
  * @param list to Add too.
  * @param value to be added.
  */
-void Add(LIST *list, void *value);
+void Add(LIST *list, void *value, bool isFree);
 
 /**
  * Gets the value at the specific index.
@@ -90,7 +90,7 @@ int IndexOfValue(LIST *list,void *value);
  * @param index to insert new value at.
  * @param newValue new value to be inserted.
  */
-void InsertNodeBeforeTarget(LIST *list, int index, void *newValue);
+void InsertNodeBeforeTarget(LIST *list, int index, void *newValue, bool isFree);
 
 /**
  * Inserts the new Node (aka value) after the specified index.
@@ -98,7 +98,7 @@ void InsertNodeBeforeTarget(LIST *list, int index, void *newValue);
  * @param index to insert new value at.
  * @param newValue the new value to insert.
  */
-void InsertNodeAfterTarget(LIST *list, int index, void *newValue);
+void InsertNodeAfterTarget(LIST *list, int index, void *newValue, bool isFree);
 
 /**
  * Removes a node by the specified value.

@@ -40,11 +40,6 @@ int freeMemoryLocation(LIST* Mem, size_t start);
  */
 void freeMemory();
 
-/**
- * Changes to node isFree bool to true, and then coalesces the previous and before nodes to
- * @param start node to begin the loop at.
- */
-void freeNode(NODE* start);
 
 /**
 * Finds the first free block of memory in the linked list that is the same or larger amount of size we need.
@@ -61,7 +56,7 @@ NODE *findFree(NODE *start, size_t size, bool found);
 * @param amount of memory needed.
 * @return new page;
 */
-NODE *splitPage(NODE *page, size_t amount);
+NODE *splitPage(LIST *mem, NODE *page, size_t amount);
 
 
 /**
@@ -69,7 +64,7 @@ NODE *splitPage(NODE *page, size_t amount);
  * @param amount amount of bytes to allocate.
  * @return a pointer to the memory location allocated.
  */
-NODE *bestFit(size_t amount);
+NODE *bestFit(LIST *mem, size_t amount);
 
 /**
 * Request memory from the memory manager linked list created when initializing the linked list. This
@@ -80,7 +75,7 @@ NODE *bestFit(size_t amount);
 * @param amount of memory needed.
 * @return pointer to the new node with the size requested.
 */
-NODE *requestMemory(size_t amount);
+NODE *requestMemory(LIST *mem, size_t amount);
 
 
 /**
@@ -88,7 +83,7 @@ NODE *requestMemory(size_t amount);
  * @param size of memory to allocate
  * @return pointer to the memory location of the allocation.
  */
-NODE *Malloc(size_t size);
+NODE *Malloc(LIST *mem, size_t size);
 
 /**
  * Dumps the memory to the console.
