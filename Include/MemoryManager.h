@@ -13,22 +13,6 @@
 #include "../DataStructures/Include/LinkedList.h"
 #include "../DataStructures/Include/Queue.h"
 
-/**
- * Memory structure, contains a freelist that holds our free memory, a busy list
- * holding the busy memory, and our memory list which combines the two in the order of actual memory.
- * Also contains a queue for objects waiting to be allocated into memory.
- */
-typedef struct Memory{
-    int Count;
-    LIST *memory;
-    QUEUE *queue;
-}MEMORY;
-
-typedef struct data{
-    size_t size;
-    bool isFree;
-    void *data;
-} DATA;
 
 /**
  * Creates a node for the user when prompted.
@@ -36,36 +20,31 @@ typedef struct data{
  * @param free is the node free of data.
  * @return pointer to node.
  */
-NODE *createNode(size_t size, bool free){
-    NODE *data;
-    data->isFree = free;
-    data->size = size;
-    return data;
-}
+NODE *createNode(size_t size, bool free);
 
 /**
  * Initalize a new memory manager object.
  * @param maxSize the maximum size of memory for the memory manager to use.
  * @return pointer to the memory management list.
  */
-static LIST *initMemory(size_t maxSize);
+LIST *initMemory(size_t maxSize);
 
 /**
  * Changes to node isFree bool to true, and then coalesces the previous and before nodes to
  * @param start node to begin the loop at.
  */
-static void freeNode(NODE* start);
+int freeMemoryLocation(LIST* Mem, size_t start);
 
 /**
  * Frees the memory manager from the windows memory manager.
  */
-static void freeMemory();
+void freeMemory();
 
 /**
  * Changes to node isFree bool to true, and then coalesces the previous and before nodes to
  * @param start node to begin the loop at.
  */
-static void freeNode(NODE* start);
+void freeNode(NODE* start);
 
 /**
 * Finds the first free block of memory in the linked list that is the same or larger amount of size we need.
@@ -73,7 +52,7 @@ static void freeNode(NODE* start);
 * @param size of space we need.
 * @return the node with enough space.
 */
-static NODE *findFree(NODE *start, size_t size, bool found);
+NODE *findFree(NODE *start, size_t size, bool found);
 
 
 /**
@@ -82,7 +61,7 @@ static NODE *findFree(NODE *start, size_t size, bool found);
 * @param amount of memory needed.
 * @return new page;
 */
-static NODE *splitPage(NODE *page, size_t amount);
+NODE *splitPage(NODE *page, size_t amount);
 
 
 /**
@@ -90,7 +69,7 @@ static NODE *splitPage(NODE *page, size_t amount);
  * @param amount amount of bytes to allocate.
  * @return a pointer to the memory location allocated.
  */
-static NODE *bestFit(size_t amount);
+NODE *bestFit(size_t amount);
 
 /**
 * Request memory from the memory manager linked list created when initializing the linked list. This
@@ -101,7 +80,7 @@ static NODE *bestFit(size_t amount);
 * @param amount of memory needed.
 * @return pointer to the new node with the size requested.
 */
-static NODE *requestMemory(size_t amount);
+NODE *requestMemory(size_t amount);
 
 
 /**
