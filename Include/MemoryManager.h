@@ -111,23 +111,12 @@ static NODE *requestMemory(size_t amount);
  */
 NODE *Malloc(size_t size);
 
+/**
+ * Dumps the memory to the console.
+ */
 void DumpMemoryList();
 
-static LIST *initMemory(size_t maxSize);
 
-static void freeNode(NODE* start);
-
-static void freeMemory();
-
-static NODE *findFree(NODE *start);
-
-static NODE *splitPage(NODE *page, size_t amount);
-
-static NODE *bestFit(size_t amount);
-
-static NODE *requestMemory(size_t amount);
-
-NODE *Malloc(size_t size);
 
 
 
