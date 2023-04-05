@@ -80,7 +80,7 @@ void DumpList(LIST *list){
     if(list->count <= 0){ return; }
     NODE *curr  = list->head;
     while(curr != NULL){
-        printf("%d\n", *(curr->value));
+        printf("%d\n", curr->value);
         if(curr->next == NULL){break;}
         curr = curr->next;
     }
@@ -98,7 +98,6 @@ int IndexOfValue(LIST *list,void *value){
     }
     return -1;
 }
-
 
 void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
     if(list->count <= 0){
@@ -153,7 +152,7 @@ bool UnlinkNodeByValue(LIST *list, void *value){
         list->count--;
         return true;
     }else{
-        int indexOfTarget = IndexOf(list,value);
+        int indexOfTarget = IndexOfValue(list,value);
 
         NODE *curr  = WalkToNode(list->head, indexOfTarget - 1);
 
