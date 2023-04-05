@@ -11,7 +11,6 @@
 
 #include <stdbool.h>
 #include <string.h>
-#include "../../Include/MemoryManager.h"
 
 /**
  * function that compares two elements.
@@ -26,7 +25,6 @@ typedef int (*compare)(const void *,const void *);
  */
 typedef struct Node{
     void *value;
-    size_t size;
     bool isFree;
     struct Node *next;
     struct Node *previous;
@@ -84,7 +82,7 @@ void DumpList(LIST *list);
  * @param value to look for.
  * @return int, the index of the value.
  */
-int IndexOf(LIST *list,void *value);
+int IndexOfValue(LIST *list,void *value);
 
 /**
  * Inserts a node (aka value) before a specific index.
