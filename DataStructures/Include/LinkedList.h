@@ -24,7 +24,7 @@ typedef int (*compare)(const void *,const void *);
  * Node structure to hold the value along with the next and previous nodes.
  */
 typedef struct Node{
-    void *value;
+    size_t size;
     bool isFree;
     struct Node *next;
     struct Node *previous;
@@ -54,7 +54,7 @@ LIST* InitList(compare Compare);
  * @param list to Add too.
  * @param value to be added.
  */
-void Add(LIST *list, void *value);
+void Add(LIST *list, size_t value);
 
 /**
  * Gets the value at the specific index.
@@ -62,7 +62,7 @@ void Add(LIST *list, void *value);
  * @param index to get value at.
  * @return the value at the index.
  */
-void *Get(LIST *list, int index);
+size_t Get(LIST *list, int index);
 
 /**
  * Destroys the list aka get's rid of the memory location by freeing the allocated memory.
@@ -82,7 +82,7 @@ void DumpList(LIST *list);
  * @param value to look for.
  * @return int, the index of the value.
  */
-int IndexOfValue(LIST *list,void *value);
+int IndexOfValue(LIST *list,size_t value);
 
 /**
  * Inserts a node (aka value) before a specific index.
@@ -90,7 +90,7 @@ int IndexOfValue(LIST *list,void *value);
  * @param index to insert new value at.
  * @param newValue new value to be inserted.
  */
-void InsertNodeBeforeTarget(LIST *list, int index, void *newValue);
+void InsertNodeBeforeTarget(LIST *list, int index, size_t newValue);
 
 /**
  * Inserts the new Node (aka value) after the specified index.
@@ -98,7 +98,7 @@ void InsertNodeBeforeTarget(LIST *list, int index, void *newValue);
  * @param index to insert new value at.
  * @param newValue the new value to insert.
  */
-void InsertNodeAfterTarget(LIST *list, int index, void *newValue);
+void InsertNodeAfterTarget(LIST *list, int index, size_t newValue);
 
 /**
  * Removes a node by the specified value.
@@ -106,7 +106,7 @@ void InsertNodeAfterTarget(LIST *list, int index, void *newValue);
  * @param value in the node we want to remove.
  * @return true if the node was removed, false otherwise.
  */
-bool UnlinkNodeByValue(LIST *list, void *value);
+bool UnlinkNodeByValue(LIST *list, size_t value);
 
 /**
  * Removes a specific index.
@@ -114,7 +114,7 @@ bool UnlinkNodeByValue(LIST *list, void *value);
  * @param index to remove
  * @return the data that was stored at the node that was removed.
  */
-void *RemoveByIndex(LIST *list, int index);
+size_t RemoveByIndex(LIST *list, int index);
 
 /**
  * Walks to an index inside a specific node.

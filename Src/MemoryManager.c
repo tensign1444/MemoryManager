@@ -1,5 +1,6 @@
 #include "../Include/MemoryManager.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include "../DataStructures/Include/Utility.h"
 #include "../DataStructures/Include/LinkedList.h"
 /**
@@ -11,7 +12,7 @@
  */
 
 #define MINREQ 0x20000 //Minimum size of memory allowed
-#define BEST_FIT 0 //True or False to use the best fit algorithm
+#define BEST_FIT 0 //True (1) or False (0) to use the best fit algorithm
 
 /**
  * The memory manager created.
@@ -39,18 +40,10 @@ NODE *createNode(size_t size, bool Free) {
 LIST *initMemory(size_t maxSize){
     size_t required = maxSize;
     while(manager == NULL){
-        manager = InitList(compare_int64_t);
-        if (required < MINREQ) // only enters if 128KB isn't available
-        {
-            if(manager)
-            {
-                free(manager);
-            }
-            printf("Cannot allocate enough memory\n");
-            exit(ENOMEM);
-        }
+        manager = InitList(compare_size_t);
         required >>= 1;
     }
+    Add(manager, maxSize);
     return manager;
 }
 
@@ -59,30 +52,25 @@ LIST *initMemory(size_t maxSize){
  * Changes to node isFree bool to true, and then coalesces the previous and before nodes to
  * @param start node to begin the loop at.
  */
-int freeMemoryLocation(LIST* Mem, size_t start) {
-    int indexOfNode = IndexOfValue(Mem, &start);
-    NODE *curr = Mem->head;
-    for(int i = 0; i < indexOfNode; i++){ curr = curr->next}
+int freeMemoryLocation(LIST* mem, NODE *curr) {
 
-    if(curr->value == &start){
-        if(curr->isFree){
+    if(curr->isFree){
             printf("ERROR: Node is already free!");
             return EXIT_FAILURE;
-        }else{
+    }else{
             if(curr->previous->isFree){
-                size_t sum = (size_t) curr->previous->value + (size_t) curr->value;
-                curr->previous->value = &sum;
+                size_t sum = curr->previous->size + curr->size;
+                curr->previous->size = sum;
                 curr = curr->previous;
-                UnlinkNodeByValue(Mem, curr->next->value);
+                UnlinkNodeByValue(mem, curr->next->size);
             }
             if(curr->next->isFree){
-                size_t sum = (size_t) curr->next->value + (size_t) curr->value;
-                curr->next->value = &sum;
+                size_t sum = curr->next->size + curr->size;
+                curr->next->size = sum;
                 curr = curr->next;
-                UnlinkNodeByValue(Mem, curr->previous->value);
+                UnlinkNodeByValue(mem, curr->previous->size);
             }
             return EXIT_SUCCESS;
-        }
     }
 }
 
@@ -99,21 +87,20 @@ void freeMemory(){ free(manager);}
 * @param size of space we need.
 * @return the node with enough space.
 */
-NODE *findFree(NODE *start, size_t size, bool found) {
-
+int findFree(NODE *start, size_t size) {
     NODE *curr = start;
-    while (curr->next != NULL) {
-        if (curr->isFree)
-            if (curr->size >= size)
-                return curr;
+    int count = 0;
+    while (!curr->isFree || curr->size < size && !curr->isFree) {
+
+        if (curr->next == NULL)
+        {
+            return -1;
+        }
         curr = curr->next;
+        count++;
     }
-    if (found)
-        return NULL;
-    else {
-        perror("No free memory!");
-        exit(0);
-    }
+    return count;
+
 }
 
 
@@ -124,26 +111,36 @@ NODE *findFree(NODE *start, size_t size, bool found) {
 * @param amount of memory needed.
 * @return new page;
 */
-NODE *splitPage(NODE *page, size_t amount) {
+NODE *splitPage(LIST *mem, int pageIndex, size_t amount) {
+    NODE *page = WalkToNode(mem->head, pageIndex);
     if (page->size == amount) {
         page->isFree = false;
         return page;
     } else {
-        NODE *newPage = createNode((size_t)page->value - amount, true);
-        page->value = &amount;
-        page->isFree = false;
-        InsertNodeAfterTarget(manager, IndexOfValue(manager, page->value), newPage);
+        page->size = page->size - amount;
+        page->isFree = true;
+        InsertNodeBeforeTarget(manager, pageIndex + 1, amount);
     }
 }
 
 
-NODE *bestFit(size_t amount) {
-    NODE *curr;
-    NODE *tempBest = findFree(manager->head, amount, false);
-    while (true) {
-        curr = findFree(curr, amount, true);
-        if (tempBest->size - amount > curr->size - amount)
-            tempBest = curr;
+int bestFit(LIST *mem, size_t amount) {
+    NODE *currNODE;
+    NODE *best;
+    int currIndex;
+    int tempBest;
+
+    currIndex = tempBest = findFree(manager->head, amount);
+    currNODE = best = WalkToNode(mem->head, tempBest);
+
+    while (currIndex < mem->count) {
+        currIndex = findFree(currNODE, amount);
+        currNODE = WalkToNode(mem, currIndex);
+        if (best->size - amount > currNODE->size - amount){
+            best = currNODE;
+            tempBest = currIndex;
+        }
+
     }
     return tempBest;
 }
@@ -158,14 +155,15 @@ NODE *bestFit(size_t amount) {
 * @param amount of memory needed.
 * @return pointer to the new node with the size requested.
 */
-NODE *requestMemory(size_t amount) {
+NODE *requestMemory(LIST *mem, size_t amount) {
     NODE *temp = manager->head;
-    NODE *freePage = findFree(temp, amount, false);
+    NODE *freePage;
+    int freeIndex = findFree(temp, amount);
     if (BEST_FIT) {
-        freePage = bestFit(amount);
-        freePage = splitPage(freePage, amount);
+        freeIndex = bestFit(mem, amount);
+        freePage = splitPage(mem, freeIndex , amount);
     } else {
-        freePage = splitPage(freePage, amount);
+        freePage = splitPage(mem, freeIndex, amount);
         return freePage;
     }
 }
@@ -175,37 +173,21 @@ NODE *requestMemory(size_t amount) {
  * @param size of memory to allocate
  * @return pointer to the memory location of the allocation.
  */
-NODE *Malloc(size_t size) {
-    return requestMemory(size);
+NODE *Malloc(LIST *mem, size_t size) {
+    return requestMemory(mem, size);
 }
 
-void DumpMemoryList() {
-    LIST *freeList;
-    LIST *busyList;
-    NODE *curr = manager->head;
-    while (curr->next != NULL) {
+void DumpMemoryList(LIST *mem) {
+    printf("___Memory Manager Dump___\n");
+    NODE *curr = mem->head;
+    while (curr != NULL) {
         if (curr->isFree) {
-            Add(freeList, curr);
+            printf("*** Size: %zu  || Free ***\n", curr->size);
         } else {
-            Add(busyList, curr);
+            printf("*** Size: %zu  || Busy ***\n", curr->size);
         }
         curr = curr->next;
     }
-
-    curr = freeList->head;
-    printf("Free Memory:\n");
-    while (curr->next != NULL) {
-        printf("Size: %s", curr->value);
-        curr = curr->next;
-    }
-    printf("Size: %s\n", curr->value);
-
-    curr = busyList->head;
-    printf("Busy Memory:\n");
-    while (curr->next != NULL) {
-        printf("Size: %s\n", curr->value);
-    }
-    printf("Size: %s", curr->value);
 }
 
 

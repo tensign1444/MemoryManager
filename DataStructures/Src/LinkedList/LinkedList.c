@@ -38,16 +38,17 @@ NODE *GetTail(NODE *temp){
 }
 
 
-void Add(LIST *list, void *value) {
+void Add(LIST *list, size_t value) {
     NODE *pList = malloc(sizeof(NODE));
     if(pList == NULL){
         return;
     }
-    pList->value = value;
+    pList->size = value;
     pList->next = pList->previous = NULL;
 
     if(list->count <= 0) {
         list->head = list->tail = pList;
+        list->head->isFree = list->tail->isFree = true;
     }
     else{
         NODE* curr = list->head;
@@ -62,11 +63,11 @@ void Add(LIST *list, void *value) {
 }
 
 
-void *Get(LIST *list, int index){
+size_t Get(LIST *list, int index){
     if(list->count <= 0)
-        return NULL;
+        return EXIT_FAILURE;
     NODE *curr = WalkToNode(list->head, index);
-    return curr->value;
+    return curr->size;
 }
 
 
@@ -80,34 +81,35 @@ void DumpList(LIST *list){
     if(list->count <= 0){ return; }
     NODE *curr  = list->head;
     while(curr != NULL){
-        printf("%d\n", curr->value);
+        printf("%d\n", curr->size);
         if(curr->next == NULL){break;}
         curr = curr->next;
     }
 }
 
-int IndexOfValue(LIST *list,void *value){
+int IndexOfValue(LIST *list,size_t value){
     if(list->count <= 0) { return -1;}
     NODE *curr  = list->head;
     int counter = 1;
     while(curr != NULL){
-        if(list->CompareTo(curr->value, value) == 0){ return counter; }
-        if(curr->next == NULL) { return -1; }
+        if(list->CompareTo(&curr->size, &value) == 0){ return counter; }
+        if(curr->next == NULL) { return EXIT_FAILURE; }
         curr = curr->next;
         counter++;
     }
     return -1;
 }
 
-void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
+void InsertNodeBeforeTarget(LIST *list, int index, size_t newValue){
     if(list->count <= 0){
         Add(list, newValue);
         return;
     }
     else if(index == 1){
         NODE* temp = malloc(sizeof(NODE));
-        temp->value = newValue;
+        temp->size = newValue;
         temp->next = list->head;
+        temp->isFree = false;
         temp->next->previous = temp;
         temp->previous = NULL;
         list->head = temp;
@@ -116,7 +118,8 @@ void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
     else{
         NODE *curr  = WalkToNode(list->head, index - 1);
         NODE* temp = malloc(sizeof(NODE));
-        temp->value = newValue;
+        temp->size = newValue;
+        temp->isFree = false;
         temp->next = curr;
         temp->previous = curr->previous;
         temp->next->previous = temp;
@@ -128,31 +131,31 @@ void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
     list->count++;
 }
 
-void InsertNodeAfterTarget(LIST *list, int index, void *newValue){
+void InsertNodeAfterTarget(LIST *list, int index, size_t newValue){
     if(list->count <= 0){
         return;
     }
     InsertNodeBeforeTarget(list,index + 1, newValue);
 }
 
-bool UnlinkNodeByValue(LIST *list, void *value){
+bool UnlinkNodeByValue(LIST *list, size_t value){
     if(list->count <= 0){ return false; }
     else if(list->count == 1){list->head = NULL; list->tail = NULL; list->count--; true;}
-    else if(list->CompareTo(list->head->value, value) == 0){
+    else if(list->CompareTo((const void *) list->head->size, (const void *) value) == 0){
         list->head->next->previous = NULL;
         list->head = list->head->next;
         list->tail = GetTail(list->head);
         list->count--;
         return true;
     }
-    else if(list->CompareTo(list->tail->value, value) == 0){
+    else if(list->CompareTo((const void *) list->tail->size, (const void *) value) == 0){
         list->tail->previous->next = NULL;
         list->tail = list->tail->previous;
         list->head = GetHead(list->tail);
         list->count--;
         return true;
     }else{
-        int indexOfTarget = IndexOfValue(list,value);
+            int indexOfTarget = IndexOfValue(list,value);
 
         NODE *curr  = WalkToNode(list->head, indexOfTarget - 1);
 
@@ -166,8 +169,8 @@ bool UnlinkNodeByValue(LIST *list, void *value){
     }
 }
 
-void *RemoveByIndex(LIST *list, int index){
-    void *value = Get(list, index);
+size_t RemoveByIndex(LIST *list, int index){
+    size_t value = Get(list, index);
     UnlinkNodeByValue(list, value);
     return value;
 }
@@ -204,7 +207,7 @@ NODE *Sort(LIST *list, NODE *leftCursor, NODE *rightCursor){
         return leftCursor;
     int x;
     int *pAlloc = &x;
-    *pAlloc = list->CompareTo(leftCursor->value, rightCursor->value);
+    *pAlloc = list->CompareTo((const void *) leftCursor->size, (const void *) rightCursor->size);
     if(*pAlloc < 0){
         temp = leftCursor;
         temp->next = Sort(list,leftCursor->next, rightCursor);

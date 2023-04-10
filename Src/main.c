@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../Test/MemoryManagerTest.h"
+#include "../Include/MemoryManagerTest.h"
 
 int main() {
     TestAll();

@@ -11,7 +11,6 @@
 
 
 #include "../DataStructures/Include/LinkedList.h"
-#include "../DataStructures/Include/Queue.h"
 
 
 /**
@@ -33,18 +32,14 @@ LIST *initMemory(size_t maxSize);
  * Changes to node isFree bool to true, and then coalesces the previous and before nodes to
  * @param start node to begin the loop at.
  */
-int freeMemoryLocation(LIST* Mem, size_t start);
+int freeMemoryLocation(LIST* mem, NODE *curr);
 
 /**
  * Frees the memory manager from the windows memory manager.
  */
 void freeMemory();
 
-/**
- * Changes to node isFree bool to true, and then coalesces the previous and before nodes to
- * @param start node to begin the loop at.
- */
-void freeNode(NODE* start);
+
 
 /**
 * Finds the first free block of memory in the linked list that is the same or larger amount of size we need.
@@ -52,7 +47,7 @@ void freeNode(NODE* start);
 * @param size of space we need.
 * @return the node with enough space.
 */
-NODE *findFree(NODE *start, size_t size, bool found);
+int findFree(NODE *start, size_t size);
 
 
 /**
@@ -61,7 +56,7 @@ NODE *findFree(NODE *start, size_t size, bool found);
 * @param amount of memory needed.
 * @return new page;
 */
-NODE *splitPage(NODE *page, size_t amount);
+NODE *splitPage(LIST *mem, int pageIndex, size_t amount) ;
 
 
 /**
@@ -69,7 +64,7 @@ NODE *splitPage(NODE *page, size_t amount);
  * @param amount amount of bytes to allocate.
  * @return a pointer to the memory location allocated.
  */
-NODE *bestFit(size_t amount);
+int bestFit(LIST *mem, size_t amount);
 
 /**
 * Request memory from the memory manager linked list created when initializing the linked list. This
@@ -80,7 +75,7 @@ NODE *bestFit(size_t amount);
 * @param amount of memory needed.
 * @return pointer to the new node with the size requested.
 */
-NODE *requestMemory(size_t amount);
+NODE *requestMemory(LIST *mem, size_t amount);
 
 
 /**
@@ -88,12 +83,12 @@ NODE *requestMemory(size_t amount);
  * @param size of memory to allocate
  * @return pointer to the memory location of the allocation.
  */
-NODE *Malloc(size_t size);
+NODE *Malloc(LIST *mem, size_t size);
 
 /**
  * Dumps the memory to the console.
  */
-void DumpMemoryList();
+void DumpMemoryList(LIST *mem);
 
 
 

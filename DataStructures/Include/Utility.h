@@ -10,8 +10,14 @@
 #define DATASTRUCTURES_UTILITY_H
 
 #include "../Include/LinkedList.h"
-#include "../Include/Queue.h"
-#include "../Include/Stack.h"
+
+/**
+ * Compares two sizes to each-other.
+ * @param a void pointer to the first size_t.
+ * @param b void pointer to the second size_t.
+ * @return int, 1 when the first element is greater than the second, -1 when the first element is less than the second, 0 when both elements are equal.
+ */
+int compare_size_t(const void* a, const void* b);
 
 /**
  * Compares two 32 bit integers to each-other.
@@ -86,26 +92,6 @@ int compareIntArrays(int a[], int b[]);
  * @param isNULL check if actual and expected both should be NULL
  */
 void TestList(LIST *listHolder, void *expected, void *actual, const char* testName, bool isNULL);
-
-/**
- * Small method for a list Queue test, checks if two objects are equal, if so they passed.
- * @param queue to test
- * @param expected output
- * @param actual output
- * @param testName name of the test
- * @param isNULL check if actual and expected both should be NULL
- */
-void TestQueue(QUEUE *queue, void *expected, void *actual, const char* testName, bool isNULL);
-
-/**
- * Small method for a Stack unit test, checks if two objects are equal, if so they passed.
- * @param stack to test
- * @param expected output
- * @param actual output
- * @param testName name of the test
- * @param isNULL check if actual and expected both should be NULL
- */
-void TestStack(STACK *stack, void *expected, void *actual, const char* testName, bool isNULL);
 
 /**
  * Generates a random 32 bit int.

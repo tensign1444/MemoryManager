@@ -9,10 +9,22 @@
 #include <string.h>
 #include "../Include/Utility.h"
 #include "../Include/LinkedList.h"
-#include "../Include/Queue.h"
-#include "../Include/Stack.h"
 #include <time.h>
 #include <stdlib.h>
+#include <stddef.h>
+#include <stdio.h>
+
+int compare_size_t(const void* a, const void* b) {
+    const size_t* pa = (const size_t*) a;
+    const size_t* pb = (const size_t*) b;
+    if (*pa < *pb) {
+        return -1;
+    } else if (*pa > *pb) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
 
 int compare_int32_t(const void *element1, const void *element2)
@@ -108,24 +120,6 @@ int compareIntArrays(int a[], int b[]) {
 void TestList(LIST *listHolder, void *expected, void *actual, const char* testName, bool isNULL){
     if(isNULL && expected == NULL && actual == NULL){ printf("%s : PASSED\n", testName); }
     else if(listHolder->CompareTo(expected, actual) == 0){
-        printf("%s : PASSED\n", testName);
-    }else {
-        printf("%s : FAILED expected: %d actual: %d\n", testName, expected, actual);
-    }
-}
-
-void TestQueue(QUEUE *queue, void *expected, void *actual, const char* testName, bool isNULL){
-    if(isNULL && expected == NULL && actual == NULL){ printf("%s : PASSED\n", testName); }
-    else if(queue->list->CompareTo(expected, actual) == 0){
-        printf("%s : PASSED\n", testName);
-    }else {
-        printf("%s : FAILED expected: %d actual: %d\n", testName, expected, actual);
-    }
-}
-
-void TestStack(STACK *stack, void *expected, void *actual, const char* testName, bool isNULL){
-    if(isNULL && expected == NULL && actual == NULL){ printf("%s : PASSED\n", testName); }
-    else if(stack->list->CompareTo(expected, actual) == 0){
         printf("%s : PASSED\n", testName);
     }else {
         printf("%s : FAILED expected: %d actual: %d\n", testName, expected, actual);

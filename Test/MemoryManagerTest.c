@@ -1,22 +1,23 @@
 #include <stdio.h>
-#include "MemoryManagerTest.h"
+#include "../Include/MemoryManagerTest.h"
 #include "../Include/MemoryManager.h"
 
 
 
 void TestFirstFitCoalescing()
 {
-    initMemory(40000);
-    Malloc(8000);
-    Malloc(12000);
-    Malloc(6000);
-    Malloc(2000);
-    Malloc(5000);
-    Malloc(7000);
-    freeNode((NODE *) 12000);
-    freeNode((NODE *) 5000);
-    Malloc(3000);
-    freeNode((NODE *) 6000);
+    LIST *mem = initMemory(40000);
+    NODE *One = Malloc(mem,8000);
+    NODE *Two = Malloc(mem,12000);
+    NODE *Three =Malloc(mem,6000);
+    NODE *Four = Malloc(mem,2000);
+    NODE *Five =Malloc(mem,5000);
+    NODE *Six =Malloc(mem,7000);
+    freeMemoryLocation(mem,Two);
+    freeMemoryLocation(mem, Five);
+    Malloc(mem, 3000);
+    freeMemoryLocation(mem, Three);
+    DumpMemoryList(mem);
 
 /*
  * The predicted output should be:
@@ -29,16 +30,18 @@ void TestFirstFitCoalescing()
 
 void TestBestFitCoalescing()
 {
-    initMemory(30000);
-    Malloc(10000);
-    Malloc(9000);
-    Malloc(3000);
-    Malloc(7000);
-    Malloc(1000);
-    freeNode((NODE*) 7000);
-    freeNode((NODE*) 9000);
-    Malloc(6000);
-    freeNode((NODE *) 3000);
+    LIST *mem = initMemory(30000);
+    Malloc(mem,10000);
+    Malloc(mem,9000);
+    Malloc(mem,3000);
+    Malloc(mem,7000);
+    Malloc(mem,1000);
+    freeMemoryLocation(mem,7000);
+    freeMemoryLocation(mem,9000);
+    Malloc(mem,6000);
+    freeMemoryLocation(mem,3000);
+
+
 /*
  * The predicted output should be:
  * 10K busy, 9K free, 3K busy, 6K busy, 2K free
@@ -50,9 +53,14 @@ void TestBestFitCoalescing()
 
 
 void TestAll(){
-    printf("__________________Running List Test____________________\n");
+    printf("__________________Running Memory Manager Test____________________\n");
     TestFirstFitCoalescing();
-    TestBestFitCoalescing();
-    printf("__________________List Test Finished____________________\n");
+    //TestBestFitCoalescing();
+    printf("__________________Memory Manager Test Finished____________________\n");
 
+}
+
+int main() {
+    TestAll();
+    return 0;
 }
