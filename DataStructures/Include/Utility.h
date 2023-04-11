@@ -12,12 +12,20 @@
 #include "../Include/LinkedList.h"
 
 /**
+ * Takes two list and compares the two of them to eachother to see if they are equal.
+ * @param list1 the first list to compare
+ * @param list2 the second list to compare
+ * @return 0 if not equal, 1 if they are.
+ */
+int compareLists(LIST *list1, LIST *list2);
+
+/**
  * Compares two sizes to each-other.
  * @param a void pointer to the first size_t.
  * @param b void pointer to the second size_t.
  * @return int, 1 when the first element is greater than the second, -1 when the first element is less than the second, 0 when both elements are equal.
  */
-int compare_size_t(const void* a, const void* b);
+int compare_size_t(size_t a, size_t b);
 
 /**
  * Compares two 32 bit integers to each-other.
@@ -92,6 +100,15 @@ int compareIntArrays(int a[], int b[]);
  * @param isNULL check if actual and expected both should be NULL
  */
 void TestList(LIST *listHolder, void *expected, void *actual, const char* testName, bool isNULL);
+
+/**
+ * Method to test if our Memory Manager test have passed.
+ * @param expected expected output
+ * @param actual actual output
+ * @param testName name of the test
+ * @param isNULL check if actual and expected both should be NULL
+ */
+void TestMemoryManager(LIST *expected, LIST *actual ,const char* testName, bool isNULL);
 
 /**
  * Generates a random 32 bit int.

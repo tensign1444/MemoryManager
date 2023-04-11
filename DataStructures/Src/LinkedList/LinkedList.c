@@ -37,6 +37,30 @@ NODE *GetTail(NODE *temp){
     return curr;
 }
 
+void AddAndSet(LIST *list, size_t value, bool isFree) {
+    NODE *pList = malloc(sizeof(NODE));
+    if(pList == NULL){
+        return;
+    }
+    pList->size = value;
+    pList->next = pList->previous = NULL;
+
+    if(list->count <= 0) {
+        list->head = list->tail = pList;
+        list->head->isFree = list->tail->isFree = isFree;
+    }
+    else{
+        NODE* curr = list->head;
+        while(curr->next != NULL){
+            curr = curr->next;
+        }
+        curr->next = pList;
+        curr->next->previous = curr;
+        curr->isFree = isFree;
+        list->tail = curr->next;
+    }
+    list->count++;
+}
 
 void Add(LIST *list, size_t value) {
     NODE *pList = malloc(sizeof(NODE));
@@ -141,14 +165,14 @@ void InsertNodeAfterTarget(LIST *list, int index, size_t newValue){
 bool UnlinkNodeByValue(LIST *list, size_t value){
     if(list->count <= 0){ return false; }
     else if(list->count == 1){list->head = NULL; list->tail = NULL; list->count--; true;}
-    else if(list->CompareTo((const void *) list->head->size, (const void *) value) == 0){
+    else if(list->CompareTo(list->head->size, value) == 0){
         list->head->next->previous = NULL;
         list->head = list->head->next;
         list->tail = GetTail(list->head);
         list->count--;
         return true;
     }
-    else if(list->CompareTo((const void *) list->tail->size, (const void *) value) == 0){
+    else if(list->CompareTo(list->tail->size, value) == 0){
         list->tail->previous->next = NULL;
         list->tail = list->tail->previous;
         list->head = GetHead(list->tail);
@@ -175,9 +199,29 @@ size_t RemoveByIndex(LIST *list, int index){
     return value;
 }
 
+void unlinkNode(LIST *list, NODE* node) {
+    // Check if the node is the head or tail of the list
+    if (node->previous == NULL) {
+        // Node is the head of the list
+        node->next->previous = NULL;
+        list->head = node->next;
+        list->count--;
+    } else if (node->next == NULL) {
+        // Node is the tail of the list
+        node->previous->next = NULL;
+        list->tail = node->previous;
+        list->count--;
+    } else {
+        // Node is in the middle of the list
+        node->previous->next = node->next;
+        node->next->previous = node->previous;
+        list->count--;
+    }
+    free(node);
+}
 NODE *WalkToNode(NODE *temp,int location){
     NODE *curr  = temp;
-    for(int i = 0; i < location; i++){
+   for(int i = 0; i < location; i++){
         curr = curr->next;
     }
     return curr;

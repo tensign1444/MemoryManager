@@ -26,6 +26,7 @@ typedef int (*compare)(const void *,const void *);
 typedef struct Node{
     size_t size;
     bool isFree;
+    int index;
     struct Node *next;
     struct Node *previous;
 } NODE;
@@ -48,6 +49,14 @@ typedef struct LList{
  * @return memory location of the list created, NULL if it failed to allocate memory.
  */
 LIST* InitList(compare Compare);
+
+/**
+ * Adds a value to the linked list and sets isFree of the node to the isFree that is given.
+ * @param list list to add too.
+ * @param value value to add.
+ * @param isFree bool if it is free or not.
+ */
+void AddAndSet(LIST *list, size_t value, bool isFree);
 
 /**
  * Adds a value to the linked list.
@@ -116,6 +125,12 @@ bool UnlinkNodeByValue(LIST *list, size_t value);
  */
 size_t RemoveByIndex(LIST *list, int index);
 
+/**
+ * Removes a node given a pointer to the Node.
+ * @param list list to remove node from.
+ * @param node Node to remove.
+ */
+void unlinkNode(LIST *list, NODE* node);
 /**
  * Walks to an index inside a specific node.
  * @param temp the node to walk.

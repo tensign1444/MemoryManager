@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "../Include/MemoryManagerTest.h"
 #include "../Include/MemoryManager.h"
-
+#include "../DataStructures/Include/LinkedList.h"
+#include "../DataStructures/Include/Utility.h"
 
 
 void TestFirstFitCoalescing()
@@ -17,8 +18,17 @@ void TestFirstFitCoalescing()
     freeMemoryLocation(mem, Five);
     Malloc(mem, 3000);
     freeMemoryLocation(mem, Three);
-    DumpMemoryList(mem);
+    //DumpMemoryList(mem);
 
+    LIST *expected = InitList(compare_size_t);
+    AddAndSet(expected, 8000, false);
+    AddAndSet(expected, 3000, false);
+    AddAndSet(expected, 15000, true);
+    AddAndSet(expected, 2000, false);
+    AddAndSet(expected,5000, true);
+    AddAndSet(expected, 7000, false);
+
+    TestMemoryManager(expected,mem, "Memory Manager Test 1", false);
 /*
  * The predicted output should be:
  * 8K Busy, 3K busy, 15K free, 2K busy, 5K free, 7K busy

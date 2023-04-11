@@ -14,12 +14,29 @@
 #include <stddef.h>
 #include <stdio.h>
 
-int compare_size_t(const void* a, const void* b) {
-    const size_t* pa = (const size_t*) a;
-    const size_t* pb = (const size_t*) b;
-    if (*pa < *pb) {
+int compareLists(LIST *list1, LIST *list2) {
+    NODE *curr1 = list1->head;
+    NODE *curr2 = list2->head;
+
+    while (curr1 != NULL && curr2 != NULL) {
+        if (curr1->size != curr2->size && curr1->isFree != curr2->isFree) {
+            return 0; // elements are not equal
+        }
+        curr1 = curr1->next;
+        curr2 = curr2->next;
+    }
+
+    if (curr1 == NULL && curr2 == NULL) {
+        return 1; // lists are equal
+    } else {
+        return 0; // lists are not equal
+    }
+}
+
+int compare_size_t(size_t a, size_t b) {
+    if (a < b) {
         return -1;
-    } else if (*pa > *pb) {
+    } else if (a > b) {
         return 1;
     } else {
         return 0;
@@ -123,6 +140,15 @@ void TestList(LIST *listHolder, void *expected, void *actual, const char* testNa
         printf("%s : PASSED\n", testName);
     }else {
         printf("%s : FAILED expected: %d actual: %d\n", testName, expected, actual);
+    }
+}
+
+void TestMemoryManager(LIST *expected, LIST *actual ,const char* testName, bool isNULL){
+    if(isNULL && expected == NULL && actual == NULL){ printf("%s : PASSED\n", testName); }
+    else if(compareLists(expected, actual) == 1){
+        printf("%s : PASSED\n", testName);
+    }else {
+        printf("%s : FAILED expected: %p actual: %p\n", testName, expected, actual);
     }
 }
 

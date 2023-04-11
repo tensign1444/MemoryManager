@@ -62,13 +62,16 @@ int freeMemoryLocation(LIST* mem, NODE *curr) {
                 size_t sum = curr->previous->size + curr->size;
                 curr->previous->size = sum;
                 curr = curr->previous;
-                UnlinkNodeByValue(mem, curr->next->size);
+                unlinkNode(mem, curr->next); //need to make it so it takes the pointer instead of value.
             }
             if(curr->next->isFree){
                 size_t sum = curr->next->size + curr->size;
                 curr->next->size = sum;
                 curr = curr->next;
-                UnlinkNodeByValue(mem, curr->previous->size);
+                unlinkNode(mem, curr->previous);
+            }
+            else{
+                curr->isFree = true;
             }
             return EXIT_SUCCESS;
     }
@@ -115,12 +118,13 @@ NODE *splitPage(LIST *mem, int pageIndex, size_t amount) {
     NODE *page = WalkToNode(mem->head, pageIndex);
     if (page->size == amount) {
         page->isFree = false;
-        return page;
     } else {
         page->size = page->size - amount;
         page->isFree = true;
         InsertNodeBeforeTarget(manager, pageIndex + 1, amount);
     }
+    page = WalkToNode(mem->head, pageIndex);
+    return page;
 }
 
 
