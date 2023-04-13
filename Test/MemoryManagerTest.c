@@ -1,22 +1,23 @@
 #include <stdio.h>
 #include "MemoryManagerTest.h"
 #include "../Include/MemoryManager.h"
+#include "../DataStructures/Include/Utility.h"
 
 
 
 void TestFirstFitCoalescing()
 {
-    initMemory(40000);
-    Malloc(8000);
-    Malloc(12000);
-    Malloc(6000);
-    Malloc(2000);
-    Malloc(5000);
-    Malloc(7000);
-    freeNode((NODE *) 12000);
-    freeNode((NODE *) 5000);
-    Malloc(3000);
-    freeNode((NODE *) 6000);
+    LIST *mem = initMemory(400000);
+    Malloc(mem, 8000);
+    Malloc(mem,12000);
+    Malloc(mem,6000);
+    Malloc(mem,2000);
+    Malloc(mem,5000);
+    Malloc(mem, 7000);
+    freeMemoryLocation(mem, 12000);
+    freeMemoryLocation(mem, 5000);
+    Malloc(mem, 3000);
+    freeMemoryLocation(mem, 6000);
 
 /*
  * The predicted output should be:

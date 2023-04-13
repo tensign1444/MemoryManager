@@ -11,7 +11,6 @@
 
 #include <stdbool.h>
 #include <string.h>
-#include "../../Include/MemoryManager.h"
 
 /**
  * function that compares two elements.
@@ -26,7 +25,6 @@ typedef int (*compare)(const void *,const void *);
  */
 typedef struct Node{
     void *value;
-    size_t size;
     bool isFree;
     struct Node *next;
     struct Node *previous;
@@ -56,7 +54,7 @@ LIST* InitList(compare Compare);
  * @param list to Add too.
  * @param value to be added.
  */
-void Add(LIST *list, void *value);
+void Add(LIST *list, void *value, bool isFree);
 
 /**
  * Gets the value at the specific index.
@@ -84,7 +82,7 @@ void DumpList(LIST *list);
  * @param value to look for.
  * @return int, the index of the value.
  */
-int IndexOf(LIST *list,void *value);
+int IndexOfValue(LIST *list,void *value);
 
 /**
  * Inserts a node (aka value) before a specific index.
@@ -92,7 +90,7 @@ int IndexOf(LIST *list,void *value);
  * @param index to insert new value at.
  * @param newValue new value to be inserted.
  */
-void InsertNodeBeforeTarget(LIST *list, int index, void *newValue);
+void InsertNodeBeforeTarget(LIST *list, int index, void *newValue, bool isFree);
 
 /**
  * Inserts the new Node (aka value) after the specified index.
@@ -100,7 +98,7 @@ void InsertNodeBeforeTarget(LIST *list, int index, void *newValue);
  * @param index to insert new value at.
  * @param newValue the new value to insert.
  */
-void InsertNodeAfterTarget(LIST *list, int index, void *newValue);
+void InsertNodeAfterTarget(LIST *list, int index, void *newValue, bool isFree);
 
 /**
  * Removes a node by the specified value.

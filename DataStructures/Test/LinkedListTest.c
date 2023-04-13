@@ -21,7 +21,7 @@ void TestAddOne(){
     int i = 10;
     void *p = &i;
     LIST *listHolder = InitList((compare) compare_int32_t);
-    Add(listHolder,&i);
+    Add(listHolder,&i, false);
     void *result = Get(listHolder,0);
     TestList(listHolder, p, result, "Add One Value", false);
     DestroyList(listHolder);
@@ -31,13 +31,13 @@ void TestAddOne(){
 void TestMultipleValue(){
     int a = 10, b = 202, c = 192, d = 282, e = 231, f = 12, g = 45;
     LIST *listHolder = InitList((compare) compare_int32_t);
-    Add(listHolder,&a);
-    Add(listHolder,&b);
-    Add(listHolder,&c);
-    Add(listHolder,&d);
-    Add(listHolder,&e);
-    Add(listHolder,&f);
-    Add(listHolder,&g);
+    Add(listHolder,&a, false);
+    Add(listHolder,&b, false);
+    Add(listHolder,&c, false);
+    Add(listHolder,&d, false);
+    Add(listHolder,&e, false);
+    Add(listHolder,&f, false);
+    Add(listHolder,&g, false);
     int *result = Get(listHolder,2);
     TestList(listHolder, &c, result, "Add Multiple Values",false);
     DestroyList(listHolder);
@@ -48,13 +48,13 @@ void TestWholeList(){
     int a = 10, b = 202, c = 192, d = 282, e = 231, f = 12, g = 45;
 
     LIST *listHolder = InitList((compare) compareIntArrays);
-    Add(listHolder,&a);
-    Add(listHolder,&b);
-    Add(listHolder,&c);
-    Add(listHolder,&d);
-    Add(listHolder,&e);
-    Add(listHolder,&f);
-    Add(listHolder,&g);
+    Add(listHolder,&a, false);
+    Add(listHolder,&b, false);
+    Add(listHolder,&c, false);
+    Add(listHolder,&d, false);
+    Add(listHolder,&e, false);
+    Add(listHolder,&f, false);
+    Add(listHolder,&g, false);
 
     void *result = Get(listHolder, 3);
 
@@ -69,13 +69,13 @@ void TestIndexOf(){
     int y = 34;
     int z = 23;
     LIST *listHolder = InitList((compare) compare_int32_t);
-    Add(listHolder,&i);
-    Add(listHolder,&x);
-    Add(listHolder,&y);
-    Add(listHolder,&z);
+    Add(listHolder,&i, false);
+    Add(listHolder,&x, false);
+    Add(listHolder,&y, false);
+    Add(listHolder,&z, false);
     int three = 3;
     int *thr = &three;
-    int result = IndexOf(listHolder,&y);
+    int result = IndexOfValue(listHolder,&y);
     TestList(listHolder, thr, &result, "IndexOf Included int", false);
     DestroyList(listHolder);
 }
@@ -86,11 +86,11 @@ void TestIndexOfFail(){
     int y = -24;
     int z = 34;
     LIST *listHolder = InitList((compare) compare_int32_t);
-    Add(listHolder,&i);
-    Add(listHolder,&x);
-    Add(listHolder,&y);
+    Add(listHolder,&i, false);
+    Add(listHolder,&x, false);
+    Add(listHolder,&y, false);
     //[10,23,-24,34]
-    int result = IndexOf(listHolder,&z);
+    int result = IndexOfValue(listHolder,&z);
     int expected = -1;
     TestList(listHolder,&expected, &result, "IndexOf Fail int",false);
     DestroyList(listHolder);
@@ -99,18 +99,18 @@ void TestIndexOfFail(){
 void TestWithRandomInsert(){
     int a = 10, b = 202, c = 192, d = 282, e = 231, f = 12, g = 45;
     LIST *listHolder = InitList((compare) compare_int32_t);
-    Add(listHolder,&a);
-    Add(listHolder,&b);
-    Add(listHolder,&c);
-    Add(listHolder,&d);
-    Add(listHolder,&e);
-    Add(listHolder,&f);
+    Add(listHolder,&a, false);
+    Add(listHolder,&b, false);
+    Add(listHolder,&c, false);
+    Add(listHolder,&d, false);
+    Add(listHolder,&e, false);
+    Add(listHolder,&f, false);
 
-    int result = IndexOf(listHolder,&d);
+    int result = IndexOfValue(listHolder,&d);
 
-    InsertNodeBeforeTarget(listHolder,4,&g);
+    InsertNodeBeforeTarget(listHolder,4,&g, false);
 
-    result = IndexOf(listHolder,&d);
+    result = IndexOfValue(listHolder,&d);
     int expected = 5;
     TestList(listHolder, &expected, &result, "Add Multiple Values", false);
     DestroyList(listHolder);
@@ -124,11 +124,11 @@ void InsertBeforeTest(){
     int y = randomInt();
     int z = randomInt();
     LIST *listHolder = InitList(compare_int32_t);
-    Add(listHolder,&i);
-    Add(listHolder,&x);
-    Add(listHolder,&y);
+    Add(listHolder,&i, false);
+    Add(listHolder,&x, false);
+    Add(listHolder,&y, false);
 
-    InsertNodeBeforeTarget(listHolder,1,&z);
+    InsertNodeBeforeTarget(listHolder,1,&z, false);
     int *result = Get(listHolder,0);
     TestList(listHolder,&z, result, "Inserted Before Element Test", false);
     DestroyList(listHolder);
@@ -142,10 +142,10 @@ void InsertAfterTest(){
     int y = -24;
     int z = 34;
     LIST *listHolder = InitList((compare) compare_int32_t);
-    Add(listHolder,&i);
-    Add(listHolder,&x);
-    Add(listHolder,&y);
-    InsertNodeAfterTarget(listHolder,1,&z);
+    Add(listHolder,&i, false);
+    Add(listHolder,&x, false);
+    Add(listHolder,&y, false);
+    InsertNodeAfterTarget(listHolder,1,&z, false);
     int *result = Get(listHolder,1);
     TestList(listHolder,&z, result, "Insert After Element Test", false);
     DestroyList(listHolder);
@@ -157,10 +157,10 @@ void InsertAfterTestTwo(){
     int y = -24;
     int z = 34;
     LIST *listHolder = InitList((compare) compare_int32_t);
-    Add(listHolder,&i);
-    Add(listHolder,&x);
-    Add(listHolder,&y);
-    InsertNodeAfterTarget(listHolder,2,&z);
+    Add(listHolder,&i, false);
+    Add(listHolder,&x, false);
+    Add(listHolder,&y, false);
+    InsertNodeAfterTarget(listHolder,2,&z, false);
     int *result = Get(listHolder,2);
     TestList(listHolder,&z, result, "Insert After Element Test Two", false);
     DestroyList(listHolder);
@@ -173,9 +173,9 @@ void removeTest(){
     int x = 23;
     int y = -24;
     LIST *listHolder = InitList((compare) compare_int32_t);
-    Add(listHolder,&i);
-    Add(listHolder,&x);
-    Add(listHolder,&y);
+    Add(listHolder,&i, false);
+    Add(listHolder,&x, false);
+    Add(listHolder,&y, false);
 
     UnlinkNodeByValue(listHolder,&x);
     int *result = Get(listHolder,1);
@@ -188,9 +188,9 @@ void removeAllTest(){
     int x = 23;
     int y = -24;
     LIST *listHolder = InitList((compare) compare_int32_t);
-    Add(listHolder,&i);
-    Add(listHolder,&x);
-    Add(listHolder,&y);
+    Add(listHolder,&i, false);
+    Add(listHolder,&x, false);
+    Add(listHolder,&y, false);
 
     UnlinkNodeByValue(listHolder,&x);
     UnlinkNodeByValue(listHolder,&i);
@@ -206,13 +206,13 @@ void TestSort(){
     int a = 10, b = 202, c = 192, d = 282, e = 231, f = 12, g = 45;
     //int expected[7] = {10,12,45,192,202,231,282};
     LIST *listHolder = InitList(compare_int32_t);
-    Add(listHolder,&a);
-    Add(listHolder,&b);
-    Add(listHolder,&c);
-    Add(listHolder,&d);
-    Add(listHolder,&e);
-    Add(listHolder,&f);
-    Add(listHolder,&g);
+    Add(listHolder,&a, false);
+    Add(listHolder,&b, false);
+    Add(listHolder,&c, false);
+    Add(listHolder,&d, false);
+    Add(listHolder,&e, false);
+    Add(listHolder,&f, false);
+    Add(listHolder,&g, false);
 
     SortList(listHolder);
 

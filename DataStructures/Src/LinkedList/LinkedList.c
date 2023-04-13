@@ -38,12 +38,13 @@ NODE *GetTail(NODE *temp){
 }
 
 
-void Add(LIST *list, void *value) {
+void Add(LIST *list, void *value, bool isFree) {
     NODE *pList = malloc(sizeof(NODE));
     if(pList == NULL){
         return;
     }
     pList->value = value;
+    pList->isFree = isFree;
     pList->next = pList->previous = NULL;
 
     if(list->count <= 0) {
@@ -80,7 +81,7 @@ void DumpList(LIST *list){
     if(list->count <= 0){ return; }
     NODE *curr  = list->head;
     while(curr != NULL){
-        printf("%d\n", *(curr->value));
+        printf("%d\n", curr->value);
         if(curr->next == NULL){break;}
         curr = curr->next;
     }
@@ -99,10 +100,9 @@ int IndexOfValue(LIST *list,void *value){
     return -1;
 }
 
-
-void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
+void InsertNodeBeforeTarget(LIST *list, int index, void *newValue, bool isFree){
     if(list->count <= 0){
-        Add(list, newValue);
+        Add(list, newValue, isFree);
         return;
     }
     else if(index == 1){
@@ -129,11 +129,11 @@ void InsertNodeBeforeTarget(LIST *list, int index, void *newValue){
     list->count++;
 }
 
-void InsertNodeAfterTarget(LIST *list, int index, void *newValue){
+void InsertNodeAfterTarget(LIST *list, int index, void *newValue, bool isFree){
     if(list->count <= 0){
         return;
     }
-    InsertNodeBeforeTarget(list,index + 1, newValue);
+    InsertNodeBeforeTarget(list,index + 1, newValue, isFree);
 }
 
 bool UnlinkNodeByValue(LIST *list, void *value){
@@ -153,7 +153,7 @@ bool UnlinkNodeByValue(LIST *list, void *value){
         list->count--;
         return true;
     }else{
-        int indexOfTarget = IndexOf(list,value);
+        int indexOfTarget = IndexOfValue(list,value);
 
         NODE *curr  = WalkToNode(list->head, indexOfTarget - 1);
 
