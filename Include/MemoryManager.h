@@ -24,9 +24,10 @@ NODE *createNode(size_t size, bool free);
 /**
  * Initalize a new memory manager object.
  * @param maxSize the maximum size of memory for the memory manager to use.
+ * @param bestFit true or false depeneding if the user wants to use best fit.
  * @return pointer to the memory management list.
  */
-LIST *initMemory(size_t maxSize);
+LIST *initMemory(size_t maxSize, bool bestFit);
 
 /**
  * Changes to node isFree bool to true, and then coalesces the previous and before nodes to
@@ -36,8 +37,9 @@ int freeMemoryLocation(LIST* mem, NODE *curr);
 
 /**
  * Frees the memory manager from the windows memory manager.
+ * @param mem the memory manager to free.
  */
-void freeMemory();
+void freeMemory(LIST* mem);
 
 
 

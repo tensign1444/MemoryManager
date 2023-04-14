@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/trish/Desktop/Code/CSC430/MemManCLI/MemoryManager
+# Install script for directory: C:/Users/trish/Desktop/Code/School/CSC430/DataStructures/MemoryManagerCLI/MemoryManager
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/trish/Desktop/Code/CSC430/MemManCLI/MemoryManager/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/trish/Desktop/Code/School/CSC430/DataStructures/MemoryManagerCLI/MemoryManager/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

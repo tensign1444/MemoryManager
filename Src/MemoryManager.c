@@ -12,7 +12,6 @@
  */
 
 #define MINREQ 0x20000 //Minimum size of memory allowed
-#define BEST_FIT 0 //True (1) or False (0) to use the best fit algorithm
 
 /**
  * The memory manager created.
@@ -37,13 +36,14 @@ NODE *createNode(size_t size, bool Free) {
  * the count equal to 0.
  * @return MEMORY structure pointer.
  */
-LIST *initMemory(size_t maxSize){
+LIST *initMemory(size_t maxSize, bool bestFit){
     size_t required = maxSize;
     while(manager == NULL){
         manager = InitList(compare_size_t);
         required >>= 1;
     }
     Add(manager, maxSize);
+    manager->bestFit = bestFit;
     return manager;
 }
 
@@ -58,13 +58,13 @@ int freeMemoryLocation(LIST* mem, NODE *curr) {
             printf("ERROR: Node is already free!");
             return EXIT_FAILURE;
     }else{
-            if(curr->previous->isFree){
+            if(curr->previous != NULL && curr->previous->isFree){
                 size_t sum = curr->previous->size + curr->size;
                 curr->previous->size = sum;
                 curr = curr->previous;
                 unlinkNode(mem, curr->next); //need to make it so it takes the pointer instead of value.
             }
-            if(curr->next->isFree){
+            if(curr->next != NULL && curr->next->isFree){
                 size_t sum = curr->next->size + curr->size;
                 curr->next->size = sum;
                 curr = curr->next;
@@ -80,7 +80,7 @@ int freeMemoryLocation(LIST* mem, NODE *curr) {
 /**
  * Frees the memory manager from the windows memory manager.
  */
-void freeMemory(){ free(manager);}
+void freeMemory(LIST* mem){ DestroyList(mem);}
 
 
 
@@ -131,22 +131,25 @@ NODE *splitPage(LIST *mem, int pageIndex, size_t amount) {
 int bestFit(LIST *mem, size_t amount) {
     NODE *currNODE;
     NODE *best;
-    int currIndex;
-    int tempBest;
+    int currIndex = 0;
+    int tempBest = 0;
 
-    currIndex = tempBest = findFree(manager->head, amount);
-    currNODE = best = WalkToNode(mem->head, tempBest);
+    currIndex = tempBest = findFree(manager->head, amount) ;
+    best = WalkToNode(mem->head, tempBest);
+    currNODE = best->next;
 
-    while (currIndex < mem->count) {
-        currIndex = findFree(currNODE, amount);
-        currNODE = WalkToNode(mem, currIndex);
+    while (currIndex < mem->count - 1) {
+        tempBest = findFree(currNODE, amount);
+        if(tempBest != 0){
+            currNODE = WalkToNode(currNODE, currIndex);
+        }
         if (best->size - amount > currNODE->size - amount){
             best = currNODE;
-            tempBest = currIndex;
         }
+        currIndex++;
 
     }
-    return tempBest;
+    return IndexOfPointer(mem, best);
 }
 
 
@@ -163,7 +166,7 @@ NODE *requestMemory(LIST *mem, size_t amount) {
     NODE *temp = manager->head;
     NODE *freePage;
     int freeIndex = findFree(temp, amount);
-    if (BEST_FIT) {
+    if (mem->bestFit) {
         freeIndex = bestFit(mem, amount);
         freePage = splitPage(mem, freeIndex , amount);
     } else {

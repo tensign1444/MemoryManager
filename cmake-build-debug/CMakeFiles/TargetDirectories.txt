@@ -1,4 +1,4 @@
-C:/Users/trish/Desktop/Code/CSC430/MemManCLI/MemoryManager/cmake-build-debug/CMakeFiles/DataStructures.dir
-C:/Users/trish/Desktop/Code/CSC430/MemManCLI/MemoryManager/cmake-build-debug/CMakeFiles/MemoryManagerTest.dir
-C:/Users/trish/Desktop/Code/CSC430/MemManCLI/MemoryManager/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/trish/Desktop/Code/CSC430/MemManCLI/MemoryManager/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/trish/Desktop/Code/School/CSC430/DataStructures/MemoryManagerCLI/MemoryManager/cmake-build-debug/CMakeFiles/DataStructures.dir
+C:/Users/trish/Desktop/Code/School/CSC430/DataStructures/MemoryManagerCLI/MemoryManager/cmake-build-debug/CMakeFiles/MemoryManagerTest.dir
+C:/Users/trish/Desktop/Code/School/CSC430/DataStructures/MemoryManagerCLI/MemoryManager/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/trish/Desktop/Code/School/CSC430/DataStructures/MemoryManagerCLI/MemoryManager/cmake-build-debug/CMakeFiles/rebuild_cache.dir

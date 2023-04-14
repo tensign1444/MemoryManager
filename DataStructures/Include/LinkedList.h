@@ -26,7 +26,6 @@ typedef int (*compare)(const void *,const void *);
 typedef struct Node{
     size_t size;
     bool isFree;
-    int index;
     struct Node *next;
     struct Node *previous;
 } NODE;
@@ -37,6 +36,7 @@ typedef struct Node{
 typedef struct LList{
     NODE *head;
     NODE *tail;
+    bool bestFit;
     int count;
     compare CompareTo;
 } LIST;
@@ -92,6 +92,15 @@ void DumpList(LIST *list);
  * @return int, the index of the value.
  */
 int IndexOfValue(LIST *list,size_t value);
+
+/**
+ * Find the index of a node in a linked list.
+ *
+ * @param head Pointer to the head of the linked list.
+ * @param node Pointer to the node being searched for.
+ * @return Index of the node in the linked list, or -1 if the node is not found.
+ */
+int IndexOfPointer(LIST *list, NODE* node);
 
 /**
  * Inserts a node (aka value) before a specific index.

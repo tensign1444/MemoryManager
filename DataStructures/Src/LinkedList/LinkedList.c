@@ -71,8 +71,10 @@ void Add(LIST *list, size_t value) {
     pList->next = pList->previous = NULL;
 
     if(list->count <= 0) {
-        list->head = list->tail = pList;
+        list->head = pList;
+        list->tail = list->head;
         list->head->isFree = list->tail->isFree = true;
+        list->count = 1;
     }
     else{
         NODE* curr = list->head;
@@ -82,8 +84,9 @@ void Add(LIST *list, size_t value) {
         curr->next = pList;
         curr->next->previous = curr;
         list->tail = curr->next;
+        list->count++;
     }
-    list->count++;
+
 }
 
 
@@ -97,7 +100,15 @@ size_t Get(LIST *list, int index){
 
 
 void DestroyList(LIST *list){
-    free(list);
+    NODE* current = list->head;
+    while (current != NULL) {
+        NODE* temp = current;
+        current = current->next;
+        free(temp);
+    }
+    list->head = NULL;
+    list->tail = NULL;
+    list->count = 0;
 }
 
 
@@ -123,6 +134,23 @@ int IndexOfValue(LIST *list,size_t value){
     }
     return -1;
 }
+
+int IndexOfPointer(LIST *list, NODE* node) {
+    int index = 0;
+    NODE* current = list->head;
+
+    while (current != NULL) {
+        if (current == node) {
+            return index;
+        }
+        current = current->next;
+        index++;
+    }
+
+    // Node not found
+    return -1;
+}
+
 
 void InsertNodeBeforeTarget(LIST *list, int index, size_t newValue){
     if(list->count <= 0){
